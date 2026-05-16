@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aura Studio – Luxury Interior Styling</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #f5f0e8;
+      --warm:    #e8dfd0;
+      --sand:    #c4b49a;
+      --taupe:   #9e8e7a;
+      --umber:   #6b5c4e;
+      --deep:    #3a2e26;
+      --text:    #2e2520;
+      --gold:    #b89b6a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 52px;
+      transition: background .4s, backdrop-filter .4s;
+    }
+    nav.scrolled {
+      background: rgba(245,240,232,.82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(196,180,154,.3);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px; font-weight: 400; letter-spacing: .22em;
+      text-transform: uppercase; color: #fff;
+      transition: color .4s;
+    }
+    nav.scrolled .nav-logo { color: var(--deep); }
+    .nav-links { display: flex; gap: 38px; list-style: none; }
+    .nav-links a {
+      font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase;
+      color: rgba(255,255,255,.85); text-decoration: none;
+      transition: color .3s;
+    }
+    nav.scrolled .nav-links a { color: var(--umber); }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; height: 100vh; min-height: 640px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(160deg, rgba(58,46,38,.55) 0%, rgba(100,82,66,.3) 60%, rgba(197,178,152,.15) 100%),
+        url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1800&q=80') center/cover no-repeat;
+    }
+    .hero-content {
+      position: relative; text-align: center; color: #fff;
+      padding: 0 24px;
+      animation: fadeUp .9s ease both;
+    }
+    .hero-eyebrow {
+      font-size: 11px; letter-spacing: .38em; text-transform: uppercase;
+      opacity: .75; margin-bottom: 20px;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(62px,10vw,110px); font-weight: 300; line-height: .95;
+      letter-spacing: .04em; margin-bottom: 18px;
+    }
+    .hero-sub {
+      font-size: 11.5px; letter-spacing: .28em; text-transform: uppercase;
+      opacity: .7; margin-bottom: 44px;
+    }
+    .hero-cta {
+      display: inline-block; padding: 14px 44px;
+      border: 1px solid rgba(255,255,255,.55);
+      color: #fff; text-decoration: none;
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      transition: background .3s, border-color .3s;
+    }
+    .hero-cta:hover { background: rgba(255,255,255,.12); border-color: #fff; }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(255,255,255,.55); font-size: 10px; letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+    .hero-scroll::after {
+      content: ''; width: 1px; height: 48px;
+      background: rgba(255,255,255,.35);
+      animation: scrollLine 1.6s ease-in-out infinite;
+    }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 110px 60px; }
+    .section-label {
+      font-size: 10px; letter-spacing: .36em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px,4vw,52px); font-weight: 300; line-height: 1.1;
+      color: var(--deep);
+    }
+
+    /* ─── PHILOSOPHY ─── */
+    .philosophy { background: var(--cream); }
+    .philosophy-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .philosophy-text p {
+      margin-top: 28px; font-size: 15px; line-height: 1.9;
+      color: var(--umber); font-weight: 300; max-width: 430px;
+    }
+    .philosophy-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-top: 34px; font-size: 11px; letter-spacing: .22em;
+      text-transform: uppercase; color: var(--deep); text-decoration: none;
+      border-bottom: 1px solid var(--sand); padding-bottom: 2px;
+      transition: color .3s, border-color .3s;
+    }
+    .philosophy-link:hover { color: var(--gold); border-color: var(--gold); }
+    .philosophy-video {
+      position: relative; aspect-ratio: 4/3; overflow: hidden;
+      background: var(--warm);
+    }
+    .philosophy-video img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.88);
+      transition: transform .6s ease;
+    }
+    .philosophy-video:hover img { transform: scale(1.03); }
+    .play-btn {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    }
+    .play-btn span {
+      width: 62px; height: 62px; border-radius: 50%;
+      background: rgba(245,240,232,.88); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: transform .3s;
+    }
+    .play-btn span:hover { transform: scale(1.08); }
+    .play-btn svg { width: 20px; height: 20px; fill: var(--deep); margin-left: 3px; }
+
+    /* ─── PROJECTS ─── */
+    .projects { background: var(--warm); padding: 110px 60px; }
+    .projects-header {
+      max-width: 1200px; margin: 0 auto 52px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .projects-nav { display: flex; gap: 10px; }
+    .projects-nav button {
+      width: 40px; height: 40px; border: 1px solid var(--sand);
+      background: none; cursor: pointer; color: var(--taupe);
+      font-size: 18px; display: flex; align-items: center; justify-content: center;
+      transition: background .2s, color .2s;
+    }
+    .projects-nav button:hover { background: var(--deep); color: #fff; border-color: var(--deep); }
+    .projects-track-wrap { max-width: 1200px; margin: 0 auto; overflow: hidden; }
+    .projects-track {
+      display: flex; gap: 24px;
+      transition: transform .5s cubic-bezier(.4,0,.2,1);
+    }
+    .project-card {
+      flex: 0 0 calc(33.33% - 16px); cursor: pointer; overflow: hidden;
+    }
+    .project-card-img {
+      aspect-ratio: 4/3; overflow: hidden; background: var(--sand);
+    }
+    .project-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .6s ease;
+    }
+    .project-card:hover .project-card-img img { transform: scale(1.05); }
+    .project-card-label {
+      margin-top: 14px; font-size: 12px; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--umber);
+    }
+
+    /* ─── PROCESS ─── */
+    .process { background: var(--cream); text-align: center; }
+    .process .section-title { margin-bottom: 64px; }
+    .process-steps {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 48px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: ''; position: absolute;
+      top: 40px; left: calc(16.66% + 16px); right: calc(16.66% + 16px);
+      height: 1px; background: var(--sand);
+    }
+    .process-step { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .process-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--warm); display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+    }
+    .process-step h4 {
+      font-family: 'Cormorant Garamond', serif; font-size: 20px;
+      font-weight: 400; color: var(--deep);
+    }
+    .process-step p {
+      font-size: 13.5px; line-height: 1.8; color: var(--taupe);
+      max-width: 240px;
+    }
+    .process-dots {
+      display: flex; justify-content: center; gap: 8px; margin-top: 52px;
+    }
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--sand); cursor: pointer; transition: background .2s;
+    }
+    .dot.active { background: var(--umber); }
+
+    /* ─── JOURNAL ─── */
+    .journal { background: var(--warm); }
+    .journal-header {
+      max-width: 1200px; margin: 0 auto 48px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .journal-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px;
+    }
+    .journal-card { cursor: pointer; }
+    .journal-card-img {
+      aspect-ratio: 3/2; overflow: hidden; background: var(--sand); margin-bottom: 20px;
+    }
+    .journal-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .6s ease;
+    }
+    .journal-card:hover .journal-card-img img { transform: scale(1.05); }
+    .journal-tag {
+      font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .journal-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; line-height: 1.3;
+      color: var(--deep); margin-bottom: 12px;
+    }
+    .journal-card p { font-size: 13.5px; line-height: 1.75; color: var(--taupe); margin-bottom: 16px; }
+    .read-more {
+      font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--deep); text-decoration: none;
+      border-bottom: 1px solid var(--sand); padding-bottom: 2px;
+      transition: color .3s, border-color .3s;
+    }
+    .read-more:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ─── NEWSLETTER ─── */
+    .newsletter {
+      background: var(--deep); padding: 70px 60px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 28px; text-align: center;
+    }
+    .newsletter p {
+      font-size: 11px; letter-spacing: .34em; text-transform: uppercase;
+      color: var(--sand);
+    }
+    .newsletter h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px; font-weight: 300; color: var(--cream);
+    }
+    .newsletter-form {
+      display: flex; gap: 0; margin-top: 8px;
+    }
+    .newsletter-form input {
+      width: 280px; padding: 14px 22px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(196,180,154,.3);
+      border-right: none; color: var(--cream); font-family: 'Jost', sans-serif;
+      font-size: 13px; outline: none;
+    }
+    .newsletter-form input::placeholder { color: rgba(196,180,154,.5); }
+    .newsletter-form button {
+      padding: 14px 30px; background: var(--gold); border: none; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--deep); font-weight: 500;
+      transition: background .3s;
+    }
+    .newsletter-form button:hover { background: var(--sand); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--deep); border-top: 1px solid rgba(196,180,154,.12);
+      padding: 40px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--cream);
+    }
+    .footer-copy { font-size: 11px; color: var(--taupe); letter-spacing: .1em; }
+    .footer-socials { display: flex; gap: 20px; }
+    .footer-socials a {
+      width: 34px; height: 34px; border: 1px solid rgba(196,180,154,.25);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sand); text-decoration: none; font-size: 13px;
+      transition: border-color .3s, color .3s;
+    }
+    .footer-socials a:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollLine {
+      0%,100% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      50%      { opacity: 1; transform: scaleY(1); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav { padding: 18px 24px; }
+      section { padding: 80px 24px; }
+      .philosophy-inner { grid-template-columns: 1fr; gap: 40px; }
+      .journal-grid { grid-template-columns: 1fr; }
+      .project-card { flex: 0 0 80%; }
+      .process-steps { grid-template-columns: 1fr; }
+      .process-steps::before { display: none; }
+      footer { flex-direction: column; gap: 20px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">Aura Studio</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#projects">Interiors</a></li>
+      <li><a href="#journal">Journal</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Est. 2018 · Mumbai & Dubai</p>
+      <h1 class="hero-title">AURA<br>STUDIO</h1>
+      <p class="hero-sub">Luxury Interior Styling Studio</p>
+      <a href="#projects" class="hero-cta">Explore Our Work</a>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section class="philosophy" id="philosophy">
+    <div class="philosophy-inner">
+      <div class="philosophy-text reveal">
+        <p class="section-label">Our Ethos</p>
+        <h2 class="section-title">Our<br>Philosophy</h2>
+        <p>
+          We believe every space holds an untold story. Our practice is rooted in
+          a deep reverence for material honesty, warm restraint, and the quiet
+          luxury of spaces that breathe. Each project is an intimate conversation
+          between light, texture, and the lives lived within.
+        </p>
+        <a href="#" class="philosophy-link">View Video &rarr;</a>
+      </div>
+      <div class="philosophy-video reveal">
+        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80" alt="Interior"/>
+        <div class="play-btn">
+          <span>
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SELECTED PROJECTS -->
+  <section class="projects" id="projects">
+    <div class="projects-header reveal">
+      <div>
+        <p class="section-label">Portfolio</p>
+        <h2 class="section-title">Selected Projects</h2>
+      </div>
+      <div class="projects-nav">
+        <button id="prevBtn">&#8592;</button>
+        <button id="nextBtn">&#8594;</button>
+      </div>
+    </div>
+    <div class="projects-track-wrap">
+      <div class="projects-track" id="projectsTrack">
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=700&q=80" alt="Project"/>
+          </div>
+          <p class="project-card-label">High-end Homes · Bandra Villa</p>
+        </div>
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80" alt="Project"/>
+          </div>
+          <p class="project-card-label">High-end Homes · Juhu Residence</p>
+        </div>
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="https://images.unsplash.com/photo-1616137466211-f939a420be84?w=700&q=80" alt="Project"/>
+          </div>
+          <p class="project-card-label">High-end Homes · Dubai Penthouse</p>
+        </div>
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=700&q=80" alt="Project"/>
+          </div>
+          <p class="project-card-label">Commercial · Worli Studio</p>
+        </div>
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=700&q=80" alt="Project"/>
+          </div>
+          <p class="project-card-label">Hospitality · The Amber Retreat</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE PROCESS -->
+  <section class="process" id="process">
+    <p class="section-label">How We Work</p>
+    <h2 class="section-title">The Process</h2>
+    <div class="process-steps reveal">
+      <div class="process-step">
+        <div class="process-icon">✦</div>
+        <h4>Discovery</h4>
+        <p>We begin by listening — deeply understanding your vision, lifestyle, and the soul of the space.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-icon">◈</div>
+        <h4>Concept</h4>
+        <p>Creating a mood board and spatial narrative that captures the essence of your future home.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-icon">◎</div>
+        <h4>Realisation</h4>
+        <p>Thoughtful curation of objects, materials and light — crafting and delivering your final sanctuary.</p>
+      </div>
+    </div>
+    <div class="process-dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </section>
+
+  <!-- JOURNAL -->
+  <section class="journal" id="journal">
+    <div class="journal-header reveal">
+      <div>
+        <p class="section-label">Editorial</p>
+        <h2 class="section-title">Journal</h2>
+      </div>
+    </div>
+    <div class="journal-grid">
+      <div class="journal-card reveal">
+        <div class="journal-card-img">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=700&q=80" alt="Journal"/>
+        </div>
+        <p class="journal-tag">Interiors</p>
+        <h3>The First Rhythm in Home for Nomads</h3>
+        <p>How the art of slowing down shapes the spaces we inhabit — an essay on permanence and warmth.</p>
+        <a href="#" class="read-more">Read more</a>
+      </div>
+      <div class="journal-card reveal">
+        <div class="journal-card-img">
+          <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=700&q=80" alt="Journal"/>
+        </div>
+        <p class="journal-tag">Material</p>
+        <h3>The Rediscovering of Stoneware Road East</h3>
+        <p>A deep dive into tactile materials that ground modern interiors in something timeless and alive.</p>
+        <a href="#" class="read-more">Read more</a>
+      </div>
+      <div class="journal-card reveal">
+        <div class="journal-card-img">
+          <img src="https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=700&q=80" alt="Journal"/>
+        </div>
+        <p class="journal-tag">Light</p>
+        <h3>Amber Hours — Designing with Natural Light</h3>
+        <p>How the golden hour of sunlight transforms a room and how to design a home that chases it all day.</p>
+        <a href="#" class="read-more">Read more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter">
+    <p>Stay Inspired</p>
+    <h2>Join Our Newsletter</h2>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Your email address"/>
+      <button>Subscribe</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Aura Studio</div>
+    <p class="footer-copy">&copy; 2026 Aura Studio. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#">f</a>
+      <a href="#">𝕏</a>
+      <a href="#">in</a>
+      <a href="#">◎</a>
+    </div>
+  </footer>
+
+  <script>
+    // ── Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Projects slider
+    const track = document.getElementById('projectsTrack');
+    const cards = track.querySelectorAll('.project-card');
+    let idx = 0;
+    const maxIdx = cards.length - 3;
+    function slide() {
+      const w = cards[0].offsetWidth + 24;
+      track.style.transform = `translateX(-${idx * w}px)`;
+    }
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (idx < maxIdx) { idx++; slide(); }
+    });
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      if (idx > 0) { idx--; slide(); }
+    });
+    window.addEventListener('resize', slide);
+
+    // ── Process dots
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((d, i) => d.addEventListener('click', () => {
+      dots.forEach(x => x.classList.remove('active'));
+      d.classList.add('active');
+    }));
+  </script>
+</body>
+</html>

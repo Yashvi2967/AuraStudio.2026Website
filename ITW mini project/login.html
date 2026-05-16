@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aura Studio – Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:  #f5f0e8;
+      --warm:   #e8dfd0;
+      --sand:   #c4b49a;
+      --taupe:  #9e8e7a;
+      --umber:  #6b5c4e;
+      --deep:   #3a2e26;
+      --gold:   #b89b6a;
+    }
+
+    html, body {
+      height: 100%; font-family: 'Jost', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ─── BACKGROUND ─── */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1800&q=85')
+        center / cover no-repeat;
+    }
+    /* multi-layer translucency: warm colour wash + blur */
+    .bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(58, 46, 38, 0.62) 0%,
+        rgba(100, 82, 66, 0.48) 40%,
+        rgba(197, 178, 152, 0.28) 100%
+      );
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+
+    /* ─── NOISE GRAIN overlay ─── */
+    .grain {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 160px;
+    }
+
+    /* ─── LAYOUT ─── */
+    .page {
+      position: relative; z-index: 2;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 480px 1fr;
+      grid-template-rows: 1fr;
+      align-items: center;
+    }
+
+    /* ─── LEFT BRAND COLUMN ─── */
+    .brand-col {
+      grid-column: 1;
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+      padding-bottom: 80px;
+    }
+    .brand-tagline {
+      font-size: 10px; letter-spacing: .36em; text-transform: uppercase;
+      color: var(--sand); margin-bottom: 18px;
+    }
+    .brand-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 3.5vw, 44px); font-weight: 300;
+      line-height: 1.22; color: rgba(245,240,232,.88);
+      max-width: 360px;
+    }
+    .brand-quote em { font-style: italic; color: var(--gold); }
+    .brand-line {
+      width: 48px; height: 1px; background: var(--gold);
+      margin-top: 32px; margin-bottom: 20px;
+    }
+    .brand-note {
+      font-size: 12px; color: rgba(196,180,154,.65);
+      letter-spacing: .08em; line-height: 1.7; max-width: 280px;
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      grid-column: 2;
+      background: rgba(245, 240, 232, 0.13);
+      border: 1px solid rgba(196, 180, 154, 0.22);
+      backdrop-filter: blur(28px) saturate(1.4);
+      -webkit-backdrop-filter: blur(28px) saturate(1.4);
+      padding: 56px 52px 52px;
+      display: flex; flex-direction: column;
+      animation: cardIn .8s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    /* ─── LOGO inside card ─── */
+    .card-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--cream); margin-bottom: 10px;
+    }
+    .card-logo-rule {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+      margin-bottom: 40px;
+    }
+
+    .card-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px; font-weight: 300; color: var(--cream);
+      line-height: 1.1; margin-bottom: 6px;
+    }
+    .card-sub {
+      font-size: 12px; color: rgba(196,180,154,.7);
+      letter-spacing: .1em; margin-bottom: 38px;
+    }
+
+    /* ─── FORM ─── */
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 22px; }
+    .form-group label {
+      font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--sand);
+    }
+    .form-group input {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(196,180,154,.25);
+      border-bottom-color: rgba(196,180,154,.55);
+      color: var(--cream); font-family: 'Jost', sans-serif;
+      font-size: 14px; font-weight: 300;
+      padding: 13px 16px; outline: none;
+      transition: border-color .3s, background .3s;
+    }
+    .form-group input::placeholder { color: rgba(196,180,154,.35); }
+    .form-group input:focus {
+      border-color: var(--gold);
+      background: rgba(255,255,255,.1);
+    }
+
+    .form-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 32px;
+    }
+    .remember {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 11.5px; color: rgba(196,180,154,.7); cursor: pointer;
+    }
+    .remember input[type="checkbox"] { display: none; }
+    .checkmark {
+      width: 16px; height: 16px;
+      border: 1px solid rgba(196,180,154,.4);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s, background .2s;
+      flex-shrink: 0;
+    }
+    .remember:hover .checkmark { border-color: var(--gold); }
+    .remember input:checked + .checkmark {
+      background: var(--gold); border-color: var(--gold);
+    }
+    .remember input:checked + .checkmark::after {
+      content: '✓'; font-size: 10px; color: var(--deep);
+    }
+    .forgot {
+      font-size: 11px; letter-spacing: .14em; color: rgba(196,180,154,.6);
+      text-decoration: none; text-transform: uppercase;
+      transition: color .3s;
+    }
+    .forgot:hover { color: var(--gold); }
+
+    /* ─── BUTTON ─── */
+    .btn-signin {
+      width: 100%; padding: 16px; text-decoration: none;
+      background: var(--gold); color: #e8dfd0; border: none; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 11.5px;
+      letter-spacing: .26em; text-transform: uppercase;
+      color: var(--deep); font-weight: 500;
+      position: relative; overflow: hidden;
+      transition: background .3s;
+    }
+    .btn-signin::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background .3s;
+    }
+    .btn-signin:hover { background: #c8a97a; }
+    .btn-signin:active::before { background: rgba(0,0,0,.08); }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      margin: 26px 0;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(196,180,154,.18);
+    }
+    .divider span {
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(196,180,154,.45);
+    }
+
+    /* ─── SECONDARY BUTTON ─── */
+    .btn-request {
+      width: 100%; padding: 15px;
+      background: transparent;
+      border: 1px solid rgba(196,180,154,.3);
+      cursor: pointer; font-family: 'Jost', sans-serif;
+      font-size: 11.5px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(245,240,232,.7);
+      transition: border-color .3s, color .3s;
+    }
+    .btn-request:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ─── BOTTOM LINKS ─── */
+    .card-footer {
+      margin-top: 30px; text-align: center;
+      font-size: 11.5px; color: rgba(196,180,154,.5);
+    }
+    .card-footer a {
+      color: var(--cream); text-decoration: none;
+      border-bottom: 1px solid rgba(196,180,154,.3);
+      padding-bottom: 1px;
+      transition: color .3s, border-color .3s;
+    }
+    .card-footer a:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ─── RIGHT DETAILS COLUMN ─── */
+    .details-col {
+      grid-column: 3;
+      display: flex; flex-direction: column; align-items: flex-end;
+      padding: 60px; padding-top: 80px;
+      height: 100%; justify-content: flex-start;
+    }
+    .nav-back {
+      font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(196,180,154,.65); text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      transition: color .3s;
+    }
+    .nav-back:hover { color: var(--gold); }
+    .nav-back::before { content: '←'; font-size: 14px; }
+
+    /* ─── SCROLL INDICATOR (bottom left) ─── */
+    .page-bottom {
+      position: fixed; bottom: 36px; left: 60px; z-index: 10;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .page-bottom span {
+      font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
+      color: rgba(196,180,154,.45); writing-mode: vertical-lr;
+    }
+    .page-bottom-line {
+      width: 1px; height: 56px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(24px) scale(.98); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      html, body { height: auto; }
+      .page {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        height: auto; min-height: 100vh;
+        padding: 40px 20px 60px;
+        align-items: start;
+      }
+      .brand-col { display: none; }
+      .details-col { display: none; }
+      .card { grid-column: 1; padding: 40px 28px; }
+      .page-bottom { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BACKGROUND -->
+  <div class="bg"></div>
+  <div class="grain"></div>
+
+  <div class="page">
+
+    <!-- LEFT BRAND -->
+    <div class="brand-col">
+      <p class="brand-tagline">Luxury Interior Styling</p>
+      <h2 class="brand-quote">
+        Spaces that<br><em>breathe,</em><br>stories that stay.
+      </h2>
+      <div class="brand-line"></div>
+      <p class="brand-note">
+        Aura Studio — crafting refined interiors for<br>
+        discerning homes across Mumbai, Dubai & beyond.
+      </p>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+      <div class="card-logo">Aura Studio</div>
+      <div class="card-logo-rule"></div>
+
+      <h1 class="card-heading">Welcome<br>back.</h1>
+      <p class="card-sub">Sign in to your client portal</p>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+
+      <div class="form-meta">
+        <label class="remember">
+          <input type="checkbox" id="rememberMe"/>
+          <span class="checkmark"></span>
+          Remember me
+        </label>
+        <a href="#" class="forgot">Forgot password?</a>
+      </div>
+
+      <button class="btn-signin"><a href="index.html">Explore our work</a></button>
+
+      <div class="divider"><span>or</span></div> 
+
+      <button class="btn-request">Request Studio Access</button>
+
+      <p class="card-footer">
+        New to Aura Studio? &nbsp;<a href="index.html">Explore our work</a>
+      </p>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="details-col">
+      <a href="index.html" class="nav-back">Back to site</a>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM LEFT DECORATION -->
+  <div class="page-bottom">
+    <div class="page-bottom-line"></div>
+    <span>Aura Studio · 2026</span>
+  </div>
+
+  <script>
+    function handleSignIn() {
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn      = document.querySelector('.btn-signin');
+
+      if (!email || !password) {
+        shake(document.querySelector('.card'));
+        return;
+      }
+
+      btn.textContent = 'Signing in…';
+      btn.style.opacity = '.7';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.textContent = '✦ Welcome';
+        btn.style.background = '#8a7a5a';
+        setTimeout(() => {
+          btn.textContent = 'Sign In';
+          btn.style.opacity = '1';
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 2000);
+      }, 1400);
+    }
+
+    function shake(el) {
+      el.style.animation = 'none';
+      el.offsetHeight; // reflow
+      el.style.animation = 'shake .4s ease';
+    }
+
+    // Add shake keyframe dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%,100% { transform: translateX(0); }
+        20%      { transform: translateX(-8px); }
+        40%      { transform: translateX(8px); }
+        60%      { transform: translateX(-5px); }
+        80%      { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Checkbox toggle
+    document.getElementById('rememberMe').addEventListener('change', function () {
+      // handled via CSS :checked
+    });
+
+    // Focus ring glow for inputs
+    document.querySelectorAll('input[type="email"], input[type="password"]').forEach(input => {
+      input.addEventListener('focus', () => {
+        input.parentElement.style.setProperty('--glow', '1');
+      });
+    });
+  </script>
+</body>
+</html>
